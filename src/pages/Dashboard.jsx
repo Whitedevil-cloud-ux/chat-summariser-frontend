@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Trash2, Eye, Search } from "lucide-react";
+import { API_BASE } from "../config";
 
 function Dashboard() {
   const [conversations, setConversations] = useState([]);
@@ -10,7 +11,7 @@ function Dashboard() {
 
   const fetchConversations = async () => {
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/chat/list/");
+      const res = await fetch(`${API_BASE}/chat/list/`);
       const data = await res.json();
       setConversations(data);
       setFiltered(data);
@@ -34,7 +35,7 @@ function Dashboard() {
 
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this conversation?")) {
-      await fetch(`http://127.0.0.1:8000/api/chat/${id}/delete/`, {
+      await fetch(`${API_BASE}/chat/${id}/delete/`, {
         method: "DELETE",
       });
       fetchConversations();

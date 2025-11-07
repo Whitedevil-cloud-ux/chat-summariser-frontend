@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Loader, MessageCircle, Search } from "lucide-react";
+import { API_BASE } from "../config";
 
 function QueryPage() {
   const [question, setQuestion] = useState("");
@@ -17,7 +18,7 @@ function QueryPage() {
     setSources([]);
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/chat/query/", {
+      const res = await fetch(`${API_BASE}/chat/query/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -48,7 +49,6 @@ function QueryPage() {
           Intelligent Query
         </h1>
 
-        {/* Query Input Section */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}

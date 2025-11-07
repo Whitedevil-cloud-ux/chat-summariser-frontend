@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Pencil, Trash2, MessageSquarePlus } from "lucide-react";
+import { API_BASE } from "../config";
 
 function Sidebar({ onSelectConversation, onNewConversation, activeId }) {
   const [conversations, setConversations] = useState([]);
@@ -9,7 +10,7 @@ function Sidebar({ onSelectConversation, onNewConversation, activeId }) {
   const fetchList = async () => {
     try {
       setLoading(true);
-      const res = await fetch("http://127.0.0.1:8000/api/chat/list/");
+      const res = await fetch(`${API_BASE}/chat/list/`);
       const data = await res.json();
       setConversations(data);
     } finally {
@@ -65,7 +66,7 @@ function Sidebar({ onSelectConversation, onNewConversation, activeId }) {
                   onClick={async () => {
                     const newTitle = prompt("Enter new title:", c.title);
                     if (newTitle) {
-                      await fetch(`http://127.0.0.1:8000/api/chat/${c.id}/edit/`, {
+                      await fetch(`${API_BASE}/chat/${c.id}/edit/`, {
                         method: "PATCH",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ title: newTitle }),
@@ -80,7 +81,7 @@ function Sidebar({ onSelectConversation, onNewConversation, activeId }) {
                 <button
                   onClick={async () => {
                     if (window.confirm("Delete this conversation?")) {
-                      await fetch(`http://127.0.0.1:8000/api/chat/${c.id}/delete/`, {
+                      await fetch(`${API_BASE}/chat/${c.id}/delete/`, {
                         method: "DELETE",
                       });
                       fetchList();

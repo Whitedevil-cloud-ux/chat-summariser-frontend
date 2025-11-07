@@ -18,12 +18,10 @@ function Navbar() {
       transition={{ duration: 0.4 }}
       className="bg-gradient-to-r from-indigo-500 to-purple-600 dark:from-gray-900 dark:to-gray-800 text-white py-4 px-6 flex justify-between items-center sticky top-0 z-20 shadow-lg"
     >
-      {/* Left Section - Brand */}
       <div className="flex items-center gap-2">
         <span className="text-xl font-bold tracking-tight">Chat Summariser</span>
       </div>
 
-      {/* Middle Section - Navigation Links */}
       <div className="hidden md:flex gap-6 text-sm font-medium">
         <NavLink
           to="/"
@@ -57,7 +55,6 @@ function Navbar() {
         </NavLink>
       </div>
 
-      {/* Right Section - Theme & Profile buttons */}
       <div className="flex items-center gap-4">
         <motion.button
           whileTap={{ scale: 0.9 }}

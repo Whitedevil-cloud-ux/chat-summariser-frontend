@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import ChatInput from "./ChatInput";
 import ChatBubble from "./ChatBubble";
+import { API_BASE } from "../config";
 
 function ChatArea({ conversationId }) {
   const [messages, setMessages] = useState([]);
@@ -12,7 +13,7 @@ function ChatArea({ conversationId }) {
         setMessages([{ sender: "ai", message: "Start a conversation to begin." }]);
         return;
       }
-      const res = await fetch(`http://127.0.0.1:8000/api/chat/${conversationId}/`);
+      const res = await fetch(`${API_BASE}/chat/${conversationId}/`);
       const data = await res.json();
       const mapped = (data.messages || []).map((m) => ({
         sender: m.sender,
@@ -30,7 +31,7 @@ function ChatArea({ conversationId }) {
     setMessages((prev) => [...prev, newMessage]);
     setIsLoading(true);
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/chat/send/", {
+      const res = await fetch(`${API_BASE}/chat/send/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ conversation_id: conversationId, message: text }),
@@ -55,7 +56,7 @@ function ChatArea({ conversationId }) {
     if (!conversationId) return;
     setIsLoading(true);
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/chat/end/", {
+      const res = await fetch(`${API_BASE}/chat/end/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ conversation_id: conversationId }),
