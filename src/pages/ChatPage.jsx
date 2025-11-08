@@ -2,17 +2,17 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import ChatArea from "../components/ChatArea";
+import Navbar from "../components/Navbar";
 import { API_BASE } from "../config";
 
 function ChatPage() {
-  const { id } = useParams(); 
+  const { id } = useParams();
   const navigate = useNavigate();
   const [conversationId, setConversationId] = useState(id || null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
-    if (id) {
-      setConversationId(id);
-    }
+    setConversationId(id || null);
   }, [id]);
 
   const handleNewConversation = async () => {
@@ -22,25 +22,38 @@ function ChatPage() {
       body: JSON.stringify({ title: "New Conversation" }),
     });
     const data = await res.json();
-
     navigate(`/chat/${data.conversation_id}`);
+    setSidebarOpen(false);
   };
 
   return (
-    <div className="flex h-[calc(100vh-64px)]">
-      <Sidebar
-        activeId={conversationId}
-        onSelectConversation={(cid) => navigate(`/chat/${cid}`)}
-        onNewConversation={handleNewConversation}
-      />
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <Navbar onToggleSidebar={() => setSidebarOpen((p) => !p)} />
 
-      {conversationId ? (
-        <ChatArea conversationId={conversationId} />
-      ) : (
-        <div className="flex-1 flex items-center justify-center text-gray-500">
-          Select or create a conversation
+      <div className="flex relative">
+        <Sidebar
+          isOpen={sidebarOpen || window.innerWidth >= 768}
+          toggleSidebar={() => setSidebarOpen((p) => !p)}
+          activeId={conversationId}
+          onSelectConversation={(cid) => {
+            navigate(`/chat/${cid}`);
+            setSidebarOpen(false);
+          }}
+          onNewConversation={handleNewConversation}
+        />
+
+        <div className="hidden md:block w-72 shrink-0" />
+
+        <div className="flex-1 min-h-[calc(100vh-56px)]">
+          {conversationId ? (
+            <ChatArea conversationId={conversationId} />
+          ) : (
+            <div className="h-[calc(100vh-56px)] flex items-center justify-center text-gray-500 dark:text-gray-300 px-4">
+              Select or create a conversation
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 }

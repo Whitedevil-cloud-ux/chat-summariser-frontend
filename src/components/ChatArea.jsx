@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ChatInput from "./ChatInput";
 import ChatBubble from "./ChatBubble";
 import { API_BASE } from "../config";
@@ -6,6 +6,7 @@ import { API_BASE } from "../config";
 function ChatArea({ conversationId }) {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const scrollRef = useRef(null);
 
   useEffect(() => {
     const load = async () => {
@@ -21,6 +22,7 @@ function ChatArea({ conversationId }) {
         timestamp: m.timestamp,
       }));
       setMessages(mapped.length ? mapped : [{ sender: "ai", message: "Say something and I’ll summarize!" }]);
+      setTimeout(() => scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" }), 50);
     };
     load();
   }, [conversationId]);
@@ -49,6 +51,7 @@ function ChatArea({ conversationId }) {
       setMessages((prev) => [...prev, { sender: "ai", message: "Unable to connect to backend" }]);
     } finally {
       setIsLoading(false);
+      setTimeout(() => scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" }), 50);
     }
   };
 
@@ -65,6 +68,7 @@ function ChatArea({ conversationId }) {
       setMessages((prev) => [...prev, { sender: "ai", message: `🧾 Summary:\n${data.summary}` }]);
     } finally {
       setIsLoading(false);
+      setTimeout(() => scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" }), 50);
     }
   };
 
@@ -73,9 +77,11 @@ function ChatArea({ conversationId }) {
   };
 
   return (
-    <div className="flex-1 flex flex-col bg-white dark:bg-gray-900">
-      <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200 dark:border-gray-700">
-        <div className="text-sm text-gray-600 dark:text-gray-300">Conversation {conversationId || "—"}</div>
+    <div className="flex h-[calc(100vh-56px)] md:h-[calc(100vh-56px)] flex-col bg-white dark:bg-gray-900">
+      <div className="flex items-center justify-between px-3 md:px-4 py-2 border-b border-gray-200 dark:border-gray-700">
+        <div className="text-xs md:text-sm text-gray-600 dark:text-gray-300">
+          Conversation {conversationId || "—"}
+        </div>
         <button
           onClick={handleEndConversation}
           className="text-xs bg-gray-800 dark:bg-indigo-500 text-white px-3 py-1 rounded disabled:bg-gray-400 dark:disabled:bg-indigo-300"
@@ -84,9 +90,17 @@ function ChatArea({ conversationId }) {
           End & Summarize
         </button>
       </div>
-      <div className="flex-1 overflow-y-auto p-4 space-y-3">
+
+      <div ref={scrollRef} className="flex-1 overflow-y-auto p-3 md:p-4 space-y-3">
         {messages.map((m, i) => (
-          <ChatBubble key={i} sender={m.sender} message={m.message} timestamp={m.timestamp} followUps={m.followUps} onClickFollowUp={handleFollowUpClick} />
+          <ChatBubble
+            key={i}
+            sender={m.sender}
+            message={m.message}
+            timestamp={m.timestamp}
+            followUps={m.followUps}
+            onClickFollowUp={handleFollowUpClick}
+          />
         ))}
         {isLoading && (
           <div className="flex justify-start">
@@ -96,6 +110,7 @@ function ChatArea({ conversationId }) {
           </div>
         )}
       </div>
+
       <ChatInput onSendMessage={handleSendMessage} disabled={isLoading || !conversationId} />
     </div>
   );

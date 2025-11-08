@@ -20,17 +20,13 @@ function QueryPage() {
     try {
       const res = await fetch(`${API_BASE}/chat/query/`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question }),
       });
-
       const data = await res.json();
 
-      if (data.error) {
-        setError(data.error);
-      } else {
+      if (data.error) setError(data.error);
+      else {
         setAnswer(data.answer);
         setSources(data.sources || []);
       }
@@ -43,22 +39,22 @@ function QueryPage() {
   };
 
   return (
-    <div className="p-8 min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="p-4 md:p-8 min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="max-w-3xl mx-auto text-center">
-        <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">
+        <h1 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-white mb-4 md:mb-6">
           Intelligent Query
         </h1>
 
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white dark:bg-gray-800 shadow-xl rounded-lg p-6 border border-gray-200 dark:border-gray-700"
+          className="bg-white dark:bg-gray-800 shadow-xl rounded-lg p-4 md:p-6 border border-gray-200 dark:border-gray-700"
         >
           <textarea
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
             rows={3}
-            className="w-full p-3 border border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white rounded-lg focus:ring focus:ring-indigo-300 resize-none"
+            className="w-full p-3 border border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white rounded-lg focus:ring focus:ring-indigo-300 resize-none text-sm md:text-base"
             placeholder="Ask something about past conversations..."
             disabled={isLoading}
           />
@@ -83,18 +79,16 @@ function QueryPage() {
         </motion.div>
 
         {error && (
-          <div className="mt-4 bg-red-100 text-red-600 border border-red-300 rounded-lg p-3">
-            {error}
-          </div>
+          <div className="mt-4 bg-red-100 text-red-600 border border-red-300 rounded-lg p-3">{error}</div>
         )}
 
         {answer && !isLoading && (
           <motion.div
-            className="mt-8 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 text-left border border-gray-200 dark:border-gray-700"
+            className="mt-6 md:mt-8 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-4 md:p-6 text-left border border-gray-200 dark:border-gray-700"
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+            <h2 className="text-base md:text-lg font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
               <MessageCircle size={20} className="text-indigo-600" /> AI Answer
             </h2>
             <p className="text-gray-700 dark:text-gray-300 whitespace-pre-line leading-relaxed">
@@ -104,23 +98,19 @@ function QueryPage() {
         )}
 
         {sources.length > 0 && (
-          <div className="mt-6 space-y-4">
-            <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+          <div className="mt-4 md:mt-6 space-y-4 text-left">
+            <h2 className="text-base md:text-lg font-semibold text-gray-800 dark:text-gray-200">
               Relevant Sources
             </h2>
             {sources.map((src, idx) => (
               <motion.div
                 key={idx}
-                className="bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 p-4 rounded-lg shadow-sm text-left"
+                className="bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 p-4 rounded-lg shadow-sm"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
               >
-                <h3 className="font-medium text-gray-800 dark:text-gray-200 mb-1">
-                  {src.title}
-                </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-2 line-clamp-2">
-                  {src.summary}
-                </p>
+                <h3 className="font-medium text-gray-800 dark:text-gray-200 mb-1">{src.title}</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-2 line-clamp-2">{src.summary}</p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">
                   Ended at: {new Date(src.ended_at).toLocaleString()}
                 </p>
