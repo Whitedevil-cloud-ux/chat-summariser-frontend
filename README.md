@@ -52,3 +52,17 @@ cp .env.example .env
 
 # 4) Run
 npm start
+
+
+# UI Screenshot
+- **Chat Page**
+<img width="1895" height="857" alt="image" src="https://github.com/user-attachments/assets/1560a6f6-fae8-4c2f-be0f-b4be68df7326" />
+
+**Dashboard Page**
+<img width="1883" height="919" alt="image" src="https://github.com/user-attachments/assets/b5f6fac4-6bb3-47a5-a894-f938f510b62b" />
+
+**Intelligent Query Page**
+<img width="1746" height="914" alt="image" src="https://github.com/user-attachments/assets/fa1c1ff1-d3bb-4bce-aa53-a265039efc2d" />
+
+
+
