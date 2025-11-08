@@ -28,8 +28,6 @@ function ChatPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <Navbar onToggleSidebar={() => setSidebarOpen((p) => !p)} />
-
       <div className="flex relative">
         <Sidebar
           isOpen={sidebarOpen || window.innerWidth >= 768}
