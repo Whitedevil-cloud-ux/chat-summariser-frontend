@@ -40,7 +40,7 @@ function ChatPage() {
           onNewConversation={handleNewConversation}
         />
 
-        <div className="flex-1 min-h-[calc(100vh-56px)]">
+        <div className="flex-1">
           {conversationId ? (
             <ChatArea conversationId={conversationId} />
           ) : (
