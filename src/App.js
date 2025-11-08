@@ -8,7 +8,7 @@ function App() {
   return (
     <Router>
       <div className="min-h-screen bg-gray-50">
-        <Navbar />
+        <Navbar onToggleSidebar={() => setSidebarOpen((p) => !p)} />
         <Routes>
           <Route path="/" element={<ChatPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
